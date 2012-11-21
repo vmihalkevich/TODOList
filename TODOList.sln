@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TODOList", "TODOList\TODOList.csproj", "{93F5F88E-0AC2-4BEC-B278-A29971CDD978}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TODOList.Web", "TODOList\TODOList.Web.csproj", "{93F5F88E-0AC2-4BEC-B278-A29971CDD978}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TODOList.DataAccess", "DataAccess\TODOList.DataAccess.csproj", "{A7016523-3994-4DA7-9E0F-17C42B51590A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{93F5F88E-0AC2-4BEC-B278-A29971CDD978}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93F5F88E-0AC2-4BEC-B278-A29971CDD978}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93F5F88E-0AC2-4BEC-B278-A29971CDD978}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7016523-3994-4DA7-9E0F-17C42B51590A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7016523-3994-4DA7-9E0F-17C42B51590A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7016523-3994-4DA7-9E0F-17C42B51590A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7016523-3994-4DA7-9E0F-17C42B51590A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

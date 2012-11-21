@@ -1,0 +1,6 @@
+d:\work\TODOList\DataAccess\bin\Debug\DataAccess.dll.config
+d:\work\TODOList\DataAccess\bin\Debug\DataAccess.dll
+d:\work\TODOList\DataAccess\bin\Debug\DataAccess.pdb
+d:\work\TODOList\DataAccess\obj\Debug\ResolveAssemblyReference.cache
+d:\work\TODOList\DataAccess\obj\Debug\DataAccess.dll
+d:\work\TODOList\DataAccess\obj\Debug\DataAccess.pdb

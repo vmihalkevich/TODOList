@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TODOList" Class="dbTODOListDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=REDNOX\RW;Initial Catalog=TODOList;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="TODOListConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Tasks" Member="Tasks">
+    <Type Name="Task">
+      <Column Name="TaskId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FinishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="PriorityId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="AssigneeId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Picture" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="StateId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Task_TaskTag" Member="TaskTags" ThisKey="TaskId" OtherKey="TaskId" Type="TaskTag" />
+      <Association Name="Priority_Task" Member="Priority" ThisKey="PriorityId" OtherKey="PriorityId" Type="Priority" IsForeignKey="true" />
+      <Association Name="Assignee_Task" Member="Assignee" ThisKey="AssigneeId" OtherKey="AssigneeId" Type="Assignee" IsForeignKey="true" />
+      <Association Name="State_Task" Member="State" ThisKey="StateId" OtherKey="StateId" Type="State" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TaskTags" Member="TaskTags">
+    <Type Name="TaskTag">
+      <Column Name="TaskTagId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TaskId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TagId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Task_TaskTag" Member="Task" ThisKey="TaskId" OtherKey="TaskId" Type="Task" IsForeignKey="true" />
+      <Association Name="Tag_TaskTag" Member="Tag" ThisKey="TagId" OtherKey="TagId" Type="Tag" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tags" Member="Tags">
+    <Type Name="Tag">
+      <Column Name="TagId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Tag_TaskTag" Member="TaskTags" ThisKey="TagId" OtherKey="TagId" Type="TaskTag" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Priorities" Member="Priorities">
+    <Type Name="Priority">
+      <Column Name="PriorityId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Priority_Task" Member="Tasks" ThisKey="PriorityId" OtherKey="PriorityId" Type="Task" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Assignees" Member="Assignees">
+    <Type Name="Assignee">
+      <Column Name="AssigneeId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Login" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Assignee_Task" Member="Tasks" ThisKey="AssigneeId" OtherKey="AssigneeId" Type="Task" />
+    </Type>
+  </Table>
+  <Table Name="dbo.States" Member="States">
+    <Type Name="State">
+      <Column Name="StateId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="State_Task" Member="Tasks" ThisKey="StateId" OtherKey="StateId" Type="Task" />
+    </Type>
+  </Table>
+</Database>
