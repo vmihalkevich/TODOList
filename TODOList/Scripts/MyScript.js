@@ -1,9 +1,20 @@
-﻿$("#firstDate").datepicker({
-    minDate: new Date(2007, 1 - 1, 1),
-    maxDate: new Date(2013, 1 - 1, 1)
-});
-
-$("#lastDate").datepicker({
-    minDate: new Date(2007, 1 - 1, 1),
-    maxDate: new Date(2013, 1 - 1, 1)
+﻿$(document).ready(function () {
+    $("#txtFirstDate").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 3,
+        dateFormat:"dd.mm.yy",
+        onClose: function (selectedDate) {
+            $("#to").datepicker("option", "minDate", selectedDate);
+        }
+    });
+    $("#txtLastDate").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 3,
+        dateFormat:"dd.mm.yy",
+        onClose: function (selectedDate) {
+            $("#from").datepicker("option", "maxDate", selectedDate);
+        }
+    });
 });

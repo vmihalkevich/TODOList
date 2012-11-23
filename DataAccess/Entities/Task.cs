@@ -7,6 +7,7 @@ namespace DataAccess.Entities
 {
     public class Task : EntityBase
     {
+        public Guid TaskId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
         public string Title { get; set; }
