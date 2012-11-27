@@ -38,7 +38,8 @@
         </asp:RequiredFieldValidator>
         <br /><br />
         <asp:Label ID="lblAssignee" runat="server" Text="Исполнитель: "></asp:Label>
-        <asp:DropDownList ID="ddlAssignee" runat="server" DataTextField="Login" DataValueField="AssigneeId">
+        <asp:DropDownList ID="ddlAssignee" runat="server" DataTextField="Login" 
+            DataValueField="AssigneeId" ondatabound="ddlAssignee_DataBound">
         </asp:DropDownList>
         <br /><br />
         <asp:Label ID="lblPriority" runat="server" Text="Приоритет: "></asp:Label>
@@ -49,6 +50,9 @@
         <asp:DropDownList ID="ddlState" runat="server" DataTextField="Text" DataValueField="StateId">
         </asp:DropDownList>
         <br /><br />
+        <asp:Label ID="lblTags" runat="server" Text="Тэги: "></asp:Label>
+        <asp:CheckBoxList ID="cblTags" runat="server" DataTextField="Text" DataValueField="TagId">
+        </asp:CheckBoxList>
         <asp:Button ID="btnSubmit" runat="server" Text="Submit" 
             onclick="btnSubmit_Click" />
     </div>

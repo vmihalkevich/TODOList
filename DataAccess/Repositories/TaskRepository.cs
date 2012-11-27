@@ -7,13 +7,13 @@ namespace DataAccess.Repositories
 {
     public class TaskRepository
     {
-        public List<Task> GetAllTasks()
+    /*    public List<Task> GetAllTasks()
         {
             using (dbTODOListDataContext dc = new dbTODOListDataContext())
             {
                 return dc.Tasks.ToList();
             }
-        }
+        }*/
 
         public Task GetTaskById(Guid id)
         {
@@ -56,7 +56,7 @@ namespace DataAccess.Repositories
         } 
 
 
-        public List<Task> GetTasks(Int32 page, Int32 pageSize, Guid assigneeId, Guid priorityId) //, DateTime firstDate, DateTime lastDate)
+        public List<Task> GetTasks(Int32 page, Int32 pageSize, Guid assigneeId, Guid priorityId, DateTime firstDate, DateTime lastDate)
         {
             using (dbTODOListDataContext dc = new dbTODOListDataContext())
             {
@@ -69,25 +69,25 @@ namespace DataAccess.Repositories
                 {
                     q = q.Where(t => t.PriorityId == priorityId);
                 }
-            /*    if (firstDate != null)
+                if (firstDate != DateTime.MinValue)
                 {
-                    q = q.Where(t => t.StartDate <= firstDate);
+                    q = q.Where(t => t.StartDate >= firstDate);
                 }
-                if (lastDate != null)
+                if (lastDate != DateTime.MinValue)
                 {
-                    q = q.Where(t => t.FinishDate >= lastDate);
-                }*/
+                    q = q.Where(t => t.FinishDate <= lastDate);
+                }
                 var list = q.ToList();
                 //var list = q.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 return list;
             }
         }
 
-        public List<Task> GetAllTasks(string Page, string PageSize, string AssigneeId, string PriorityId) //, string FirstDate, string LastDate)
+        public List<Task> GetAllTasks(string Page, string PageSize, string AssigneeId, string PriorityId, string FirstDate, string LastDate)
         {
             Int32 page = 0, pageSize = 0, result;
             Guid assigneeId = Guid.Empty, priorityId = Guid.Empty, result2;
-           // DateTime firstDate = DateTime.Today, lastDate = DateTime.Today, result3;
+            DateTime firstDate = DateTime.MinValue, lastDate = DateTime.MinValue, result3;
             if (Int32.TryParse(Page, out result))
             {
                 page = result;
@@ -104,15 +104,15 @@ namespace DataAccess.Repositories
             {
                 priorityId = result2;
             }
-         /*   if (DateTime.TryParse(FirstDate, out result3))
+            if (DateTime.TryParse(FirstDate, out result3))
             {
                 firstDate = result3;
             }
             if (DateTime.TryParse(LastDate, out result3))
             {
                 lastDate = result3;
-            }*/
-            List<Task> tasksList = GetTasks(page, pageSize, assigneeId, priorityId); //, firstDate, lastDate);
+            }
+            List<Task> tasksList = GetTasks(page, pageSize, assigneeId, priorityId, firstDate, lastDate);
             return tasksList;
         }
 
@@ -159,5 +159,41 @@ namespace DataAccess.Repositories
                 dc.SubmitChanges();
             }
         }
+
+        //Order data
+
+        public List<Task> OrderByStartDate(List<Task> tasksList, bool isAscending)
+        {
+            if (isAscending)
+                return tasksList.OrderBy(t => t.StartDate).ToList();
+            else
+                return tasksList.OrderByDescending(t => t.StartDate).ToList();
+        }
+
+        public List<Task> OrderByFinishDate(List<Task> tasksList, bool isAscending)
+        {
+            if (isAscending)
+                return tasksList.OrderBy(t => t.FinishDate).ToList();
+            else
+                return tasksList.OrderByDescending(t => t.FinishDate).ToList();
+        }
+
+        public List<Task> OrderByTitle(List<Task> tasksList, bool isAscending)
+        {
+            if (isAscending)
+                return tasksList.OrderBy(t => t.Title).ToList();
+            else
+                return tasksList.OrderByDescending(t => t.Title).ToList();
+        }
+
+        public List<Task> OrderByDescription(List<Task> tasksList, bool isAscending)
+        {
+            if (isAscending)
+                return tasksList.OrderBy(t => t.Description).ToList();
+            else
+                return tasksList.OrderByDescending(t => t.Description).ToList();
+        }
+
+
     }
 }
