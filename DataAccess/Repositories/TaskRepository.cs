@@ -3,64 +3,138 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using DataAccess.Entities;
+
 namespace DataAccess.Repositories
 {
     public class TaskRepository
     {
-    /*    public List<Task> GetAllTasks()
-        {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
-            {
-                return dc.Tasks.ToList();
-            }
-        }*/
 
         public Task GetTaskById(Guid id)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Tasks.SingleOrDefault(t => t.TaskId == id);
+                //return dc.Tasks.SingleOrDefault(t => t.TaskId == id);
+                var task = dc.tTasks.SingleOrDefault(t => t.PriorityId == id);
+                if (task != null)
+                {
+                    return new Task
+                    { 
+                        Id = task.TaskId, 
+                        StartDate = task.StartDate, 
+                        FinishDate = task.FinishDate, 
+                        Title = task.Title, 
+                        Description = task.Description, 
+                        PriorityId = task.PriorityId,
+                        AssigneeId = task.AssigneeId,
+                        Picture = task.Picture,
+                        StateId = task.StateId
+                    };
+                }
+                return null;  
             }
         }
 
         public List<Task> GetAllTasks(Int32 page, Int32 pageSize)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Tasks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                return dc.tTasks.Select(t => new Task
+                {
+                    Id = t.TaskId,
+                    StartDate = t.StartDate,
+                    FinishDate = t.FinishDate,
+                    Title = t.Title,
+                    Description = t.Description,
+                    PriorityId = t.PriorityId,
+                    AssigneeId = t.AssigneeId,
+                    Picture = t.Picture,
+                    StateId = t.StateId
+                }).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
         }
 
         public List<Task> GetTasksByAssignee(Int32 page, Int32 pageSize, Guid assigneeId)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Tasks.Where(t => t.AssigneeId == assigneeId).Skip((page - 1) * pageSize).Take(pageSize).ToList();                
+                return dc.tTasks.Where(t => t.AssigneeId == assigneeId).Select(t => new Task
+                {
+                    Id = t.TaskId,
+                    StartDate = t.StartDate,
+                    FinishDate = t.FinishDate,
+                    Title = t.Title,
+                    Description = t.Description,
+                    PriorityId = t.PriorityId,
+                    AssigneeId = t.AssigneeId,
+                    Picture = t.Picture,
+                    StateId = t.StateId
+                }).Skip((page - 1) * pageSize).Take(pageSize).ToList();                
             }
         }
 
         public List<Task> GetTaskByPriority(Int32 page, Int32 pageSize, Guid priorityId)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Tasks.Where(t => t.PriorityId == priorityId).Skip((page - 1) * pageSize).Take(pageSize).ToList(); 
+                return dc.tTasks.Where(t => t.PriorityId == priorityId).Select(t => new Task
+                {
+                    Id = t.TaskId,
+                    StartDate = t.StartDate,
+                    FinishDate = t.FinishDate,
+                    Title = t.Title,
+                    Description = t.Description,
+                    PriorityId = t.PriorityId,
+                    AssigneeId = t.AssigneeId,
+                    Picture = t.Picture,
+                    StateId = t.StateId
+                }).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
         }
 
         public List<Task> GetTaskByState(Int32 page, Int32 pageSize, Guid stateId)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Tasks.Where(t => t.StateId == stateId).Skip((page - 1) * pageSize).Take(pageSize).ToList(); 
+                return dc.tTasks.Where(t => t.StateId == stateId).Select(t => new Task
+                {
+                    Id = t.TaskId,
+                    StartDate = t.StartDate,
+                    FinishDate = t.FinishDate,
+                    Title = t.Title,
+                    Description = t.Description,
+                    PriorityId = t.PriorityId,
+                    AssigneeId = t.AssigneeId,
+                    Picture = t.Picture,
+                    StateId = t.StateId
+                }).Skip((page - 1) * pageSize).Take(pageSize).ToList(); 
             }
         } 
 
-
         public List<Task> GetTasks(Int32 page, Int32 pageSize, Guid assigneeId, Guid priorityId, DateTime firstDate, DateTime lastDate)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                var q = dc.Tasks.Where(t => 1 == 1);
+              /*  List<Task> tasks = dc.tTasks
+                    .Where(t => assigneeId != Guid.Empty && t.AssigneeId == assigneeId)
+                    .Where(t => priorityId != Guid.Empty && t.PriorityId == priorityId)
+                    .Where(t => firstDate != DateTime.MinValue && t.StartDate >= firstDate)
+                    .Where(t => lastDate != DateTime.MinValue && t.FinishDate <= lastDate)
+                    .Select(t => new Task
+                    {
+                        Id = t.TaskId,
+                        StartDate = t.StartDate,
+                        FinishDate = t.FinishDate,
+                        Title = t.Title,
+                        Description = t.Description,
+                        PriorityId = t.PriorityId,
+                        AssigneeId = t.AssigneeId,
+                        Picture = t.Picture,
+                        StateId = t.StateId
+                    }).ToList();
+                return tasks; */
+
+                var q = dc.tTasks.Where(t => 1 == 1);
                 if (assigneeId != Guid.Empty)
                 {
                     q = q.Where(t => t.AssigneeId == assigneeId);
@@ -77,9 +151,20 @@ namespace DataAccess.Repositories
                 {
                     q = q.Where(t => t.FinishDate <= lastDate);
                 }
-                var list = q.ToList();
+                var list = q.Select(t => new Task
+                    {
+                        Id = t.TaskId,
+                        StartDate = t.StartDate,
+                        FinishDate = t.FinishDate,
+                        Title = t.Title,
+                        Description = t.Description,
+                        PriorityId = t.PriorityId,
+                        AssigneeId = t.AssigneeId,
+                        Picture = t.Picture,
+                        StateId = t.StateId
+                    }).ToList();
                 //var list = q.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                return list;
+                return list; 
             }
         }
 
@@ -117,7 +202,7 @@ namespace DataAccess.Repositories
         }
 
 
-        public void AddTask(string startDate, string finishDate, string title, string description, string priorityId, string assigneeId, string stateId)
+        public Guid AddTask(string startDate, string finishDate, string title, string description, string priorityId, string assigneeId, string picturePath, string stateId)
         {
             DateTime _startDate = DateTime.Today, _finishDate = DateTime.Today, result1;
             Guid _priorityId = Guid.Empty, _assigneeId = Guid.Empty, _stateId = Guid.Empty, result2;
@@ -142,7 +227,7 @@ namespace DataAccess.Repositories
                 _stateId = result2;
             }
 
-            Task newTask = new Task();
+            tTask newTask = new tTask();
             newTask.TaskId = Guid.NewGuid();
             newTask.StartDate = _startDate;
             newTask.FinishDate = _finishDate;
@@ -150,14 +235,16 @@ namespace DataAccess.Repositories
             newTask.Description = description;
             newTask.PriorityId = _priorityId;
             newTask.AssigneeId = _assigneeId;
-            newTask.Picture = @"D:\work\TODOList\Images";
+            newTask.Picture = picturePath;
             newTask.StateId = _stateId;
 
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                dc.Tasks.InsertOnSubmit(newTask);
+                dc.tTasks.InsertOnSubmit(newTask);
                 dc.SubmitChanges();
             }
+
+            return newTask.TaskId;
         }
 
         //Order data

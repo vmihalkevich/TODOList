@@ -3,26 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using DataAccess.Entities;
+
 namespace DataAccess.Repositories
 {
     public class AssigneeRepository
     {
         public List<Assignee> GetAllAssignees()
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Assignees.ToList();
+                return dc.tAssignees.Select(a => new Assignee { Id = a.AssigneeId, FirstName = a.FirstName, LastName = a.LastName, Login = a.Login }).ToList();
             }
         }
 
         public Assignee GetAssigneeById(Guid id)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.Assignees.SingleOrDefault(a => a.AssigneeId == id);
+                var assignee = dc.tAssignees.SingleOrDefault(a => a.AssigneeId == id);
+                if (assignee != null)
+                {
+                    return new Assignee { Id = assignee.AssigneeId, FirstName = assignee.FirstName, LastName = assignee.LastName, Login = assignee.Login };
+                }
+                return null;
             }
         }
-
-
     }
 }

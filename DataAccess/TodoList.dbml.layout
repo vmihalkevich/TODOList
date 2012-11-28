@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="TodoList">
+  <DataContextMoniker Name="/TodoListDataContext" />
+  <nestedChildShapes>
+    <classShape Id="999885c9-1266-46c7-9a70-b232fa572099" absoluteBounds="1.625, 3, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/TodoListDataContext/tAssignee" />
+      <nestedChildShapes>
+        <elementListCompartment Id="101ba8a7-3f77-40d0-ba5f-352b377593d2" absoluteBounds="1.6400000000000001, 3.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="805cf4b4-b66f-449f-83cb-096e452e0bcf" absoluteBounds="4.625, 2.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/TodoListDataContext/tTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="59e2467d-e3da-490b-be5f-c1d93bcd1347" absoluteBounds="4.64, 3.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.625 : 3.78929768880208); (4.625 : 3.78929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TodoListDataContext/tAssignee/tAssignee_tTask" />
+      <nodes>
+        <classShapeMoniker Id="999885c9-1266-46c7-9a70-b232fa572099" />
+        <classShapeMoniker Id="805cf4b4-b66f-449f-83cb-096e452e0bcf" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="3e814436-f943-4a82-943d-ab06fa2416b5" absoluteBounds="7.75, 0.875, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/TodoListDataContext/tTag" />
+      <nestedChildShapes>
+        <elementListCompartment Id="eb911dbe-29b5-4fac-9cb0-17cfef825433" absoluteBounds="7.765, 1.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="97ec1535-8b59-48cc-9f06-b8d6b45af9aa" absoluteBounds="4.625, 0.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/TodoListDataContext/tTaskTag" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9637dbe1-38ca-4963-a2fa-83f7f56e5f50" absoluteBounds="4.64, 1.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.75 : 1.47199625651042); (6.625 : 1.47199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TodoListDataContext/tTag/tTag_tTaskTag" />
+      <nodes>
+        <classShapeMoniker Id="3e814436-f943-4a82-943d-ab06fa2416b5" />
+        <classShapeMoniker Id="97ec1535-8b59-48cc-9f06-b8d6b45af9aa" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.625 : 2.75); (5.625 : 2.2612939453125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TodoListDataContext/tTask/tTask_tTaskTag" />
+      <nodes>
+        <classShapeMoniker Id="805cf4b4-b66f-449f-83cb-096e452e0bcf" />
+        <classShapeMoniker Id="97ec1535-8b59-48cc-9f06-b8d6b45af9aa" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="214ca4dd-fba6-4d8b-b506-a6b9bc9ab063" absoluteBounds="7.75, 3.375, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/TodoListDataContext/tPriority" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c1ead13c-7f94-45c3-a7b2-21e195904362" absoluteBounds="7.765, 3.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.75 : 3.97199625651042); (6.625 : 3.97199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TodoListDataContext/tPriority/tPriority_tTask" />
+      <nodes>
+        <classShapeMoniker Id="214ca4dd-fba6-4d8b-b506-a6b9bc9ab063" />
+        <classShapeMoniker Id="805cf4b4-b66f-449f-83cb-096e452e0bcf" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="956e265d-de17-4e7f-8f67-2c72b1695fee" absoluteBounds="4.625, 6.125, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/TodoListDataContext/tState" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d03b03e6-ce7f-400b-8fb0-fa061fb8e5e4" absoluteBounds="4.64, 6.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.625 : 6.125); (5.625 : 5.2901025390625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TodoListDataContext/tState/tState_tTask" />
+      <nodes>
+        <classShapeMoniker Id="956e265d-de17-4e7f-8f67-2c72b1695fee" />
+        <classShapeMoniker Id="805cf4b4-b66f-449f-83cb-096e452e0bcf" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

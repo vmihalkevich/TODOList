@@ -34,7 +34,7 @@
                 ErrorMessage="Completion date shall not be less than the creation date"></asp:CompareValidator>
             <br /><br />
             <asp:Label ID="lblAssignees" runat="server" Text="Assignee"></asp:Label>
-            <asp:DropDownList ID="ddlAssignees" runat="server" DataTextField="Login" DataValueField="AssigneeId"                
+            <asp:DropDownList ID="ddlAssignees" runat="server" DataTextField="Login" DataValueField="Id"                
                     OnSelectedIndexChanged="ddlAssignees_SelectedIndexChanged" AutoPostBack="True" AppendDataBoundItems="True">
                 <Items>
                     <asp:ListItem Text="(All Assignees)"></asp:ListItem>
@@ -42,7 +42,7 @@
             </asp:DropDownList>
             <br /><br />
             <asp:Label ID="lblPriority" runat="server" Text="Priority"></asp:Label>
-            <asp:DropDownList ID="ddlPriorities" runat="server" DataTextField="Text" DataValueField="PriorityId"
+            <asp:DropDownList ID="ddlPriorities" runat="server" DataTextField="Text" DataValueField="Id"
                 AutoPostBack="True" OnSelectedIndexChanged="ddlPriorities_SelectedIndexChanged" AppendDataBoundItems="True">
                 <Items>
                     <asp:ListItem Text="(All Priorities)"></asp:ListItem>
@@ -64,6 +64,9 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <div class="task">
+                        <div>
+                            <asp:Image ID="imgPicture" ImageUrl='<%# Eval("Picture")%>' runat="server" width="100px" height="100px" />
+                        </div>
                         <h2 id="taskTitle">
                             <%# Eval("Title")%>
                         <h2 />
@@ -80,16 +83,25 @@
                         <p id="priority">
                             <%# GetPriorityDetails(Eval("PriorityId"))%>
                         </p>
+                        <p id="tags">
+                            <%# GetTagsDetails(Eval("Id"))%>
+                        </p>                           
                     </div>
                 </ItemTemplate>
-                <FooterTemplate>
-                    <asp:Label ID="lblCurrentPage" runat="server"></asp:Label>
-                    <br />
-                    <div>
-
-                    </div>
-                </FooterTemplate>
             </asp:Repeater>
+            <div>
+                <asp:Label ID="lblCurrentPage" runat="server"></asp:Label>
+                <br />
+                <asp:LinkButton ID="lbFirst" runat="server" Text=" first " OnClick="lbFirst_Click"></asp:LinkButton>
+                &nbsp; &nbsp;
+                <asp:LinkButton ID="lbPrev" runat="server" Text=" previous " OnClick="lbPrev_Click"></asp:LinkButton>
+                &nbsp; &nbsp;
+                <asp:label ID="PagesDisplay" runat="server"></asp:label>
+                &nbsp; &nbsp;
+                <asp:LinkButton ID="lbNext" runat="server" Text=" next " OnClick="lbNext_Click"></asp:LinkButton>
+                &nbsp; &nbsp;
+                <asp:LinkButton ID="lbLast" runat="server" Text=" last " OnClick="lbLast_Click"></asp:LinkButton>
+            </div>
         </div>
     </div>
     </form>

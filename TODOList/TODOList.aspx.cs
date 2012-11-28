@@ -64,6 +64,17 @@ namespace TODOList
             return prt.Text;
         }
 
+        protected string GetTagsDetails(object id)
+        {
+            TagRepository tr = new TagRepository();
+            var strTags = tr.GetTaskTags(Guid.Parse(id.ToString()));
+            if (strTags.Length <= 0)
+            {
+                strTags = "no tags";
+            }
+            return strTags;
+        }
+
         protected string ToShortDate(object curDate)
         {
             if (curDate != null)
@@ -74,6 +85,22 @@ namespace TODOList
             {
                 return null; 
             }            
+        }
+
+        public int NowViewing
+        {
+            get
+            {
+                object obj = ViewState["_NowViewing"];
+                if (obj == null)
+                    return 0;
+                else
+                    return (int)obj;
+            }
+            set
+            {
+                this.ViewState["_NowViewing"] = value;
+            }
         }
 
         protected void FillRepeater()
@@ -126,10 +153,10 @@ namespace TODOList
                     break;
             }
 
-            rptTasks.DataSource = list; 
-            rptTasks.DataBind();
+      //      rptTasks.DataSource = list; 
+      //     rptTasks.DataBind();
 
-     /*       //Create the object of PagedDataSource
+            //Create the object of PagedDataSource
             PagedDataSource objPds = new PagedDataSource();
 
             //Assign our data source to PagedDataSource object
@@ -141,18 +168,77 @@ namespace TODOList
             //Set the number of items you want to show
             objPds.PageSize = Int32.Parse(hfPageSize.Value);
 
+            string navigation = (ViewState["Navigation"] ?? "").ToString();
+            switch (navigation)
+            {
+                case "Next":    
+                    NowViewing++;
+                    break;
+                case "Prev":   
+                    NowViewing--;
+                    break;
+                case "Last":       
+                    NowViewing = objPds.PageCount - 1;
+                    break;
+                default:                    
+                    NowViewing = 0;
+                    break;
+            }
+
             //Set the current page index
-            //objPds.CurrentPageIndex = NowViewing;
+            objPds.CurrentPageIndex = NowViewing;
+
+            //Change the text Now viewing text
+            lblCurrentPage.Text = "Now viewing : " + (NowViewing + 1).ToString() + " of " + objPds.PageCount.ToString();
+
+            // Disable Prev, Next, First, Last buttons if necessary
+            lbPrev.Enabled = !objPds.IsFirstPage;
+            lbNext.Enabled = !objPds.IsLastPage;
+            lbFirst.Enabled = !objPds.IsFirstPage;
+            lbLast.Enabled = !objPds.IsLastPage;
             
-           //Assign PagedDataSource to repeater
+            // Display the page links
+            PagesDisplay.Text = "";
+            for (int i = 1; i <= objPds.PageCount; i++)
+            {
+                if ((NowViewing + 1) != i)
+                    PagesDisplay.Text += "<a href=\"javascript:ChangePage("+i+")\">"+i+"</a>  ";
+                else
+                    PagesDisplay.Text += "[" + i + "]  ";
+            }
+
             rptTasks.DataSource = objPds;
-            rptTasks.DataBind(); */
+            rptTasks.DataBind(); 
 
         }
 
         protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             ViewState["SortExpression"] = e.CommandName;
+            FillRepeater();
+        }
+
+        protected void lbPrev_Click(object sender, EventArgs e)
+        {
+            ViewState["Navigation"] = "Prev";
+            FillRepeater();
+        }
+
+        protected void lbNext_Click(object sender, EventArgs e)
+        {
+            ViewState["Navigation"] = "Next";
+            FillRepeater();
+        }
+
+        protected void lbFirst_Click(object sender, EventArgs e)
+        {
+            ViewState["Navigation"] = "First";
+            FillRepeater();
+        }
+
+        protected void lbLast_Click(object sender, EventArgs e)
+        {
+            ViewState["Navigation"] = "Last";
             FillRepeater();
         }
 

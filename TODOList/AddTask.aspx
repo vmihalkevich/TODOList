@@ -14,45 +14,62 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        <asp:Label ID="lblFirstDate" runat="server" Text="Дата создания: "></asp:Label>
+        <asp:Label ID="lblFirstDate" runat="server" Text="Creation Date: "></asp:Label>
         <asp:TextBox ID="txtFirstDate" runat="server" EnableViewState="False"></asp:TextBox>
         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-            ControlToValidate="txtFirstDate" Display="Dynamic" ErrorMessage="Укажите дату создания"></asp:RequiredFieldValidator>
+            ControlToValidate="txtFirstDate" Display="Dynamic" ErrorMessage="Select Creation date"></asp:RequiredFieldValidator>
         <br /><br />
-        <asp:Label ID="lblLastDate" runat="server" Text="Дата завершения: "></asp:Label>
+        <asp:Label ID="lblLastDate" runat="server" Text="Completion Date: "></asp:Label>
         <asp:TextBox ID="txtLastDate" runat="server" EnableViewState="False"></asp:TextBox>
-        <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="txtLastDate" Display="Dynamic"
-            ControlToCompare="txtFirstDate" Type="Date" Operator="GreaterThanEqual" ErrorMessage="Дата завершения должна быть не меньше даты создания"></asp:CompareValidator>
+        <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="txtLastDate"
+            Display="Dynamic" ControlToCompare="txtFirstDate" Type="Date" Operator="GreaterThanEqual"
+            ErrorMessage="Completion date shall not be less than the creation date"></asp:CompareValidator>
         <br /><br />
-        <asp:Label ID="lblTitle" runat="server" Text="Заголовок: "></asp:Label>
+        <asp:Label ID="lblTitle" runat="server" Text="Title: "></asp:Label>
         <asp:TextBox ID="txtTitle" runat="server" EnableViewState="False"></asp:TextBox>
         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-            ControlToValidate="txtTitle" Display="Dynamic" ErrorMessage="Укажите заголовок">
+            ControlToValidate="txtTitle" Display="Dynamic" ErrorMessage="Select Title">
         </asp:RequiredFieldValidator>
         <br /><br />
-        <asp:Label ID="lblDescription" runat="server" Text="Описание задания: "></asp:Label>
+        <asp:Label ID="lblDescription" runat="server" Text="Description: "></asp:Label>
         <asp:TextBox ID="txtDescription" runat="server" Rows="4" TextMode="MultiLine" 
             Width="253px" EnableViewState="False"></asp:TextBox>
         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
-            ControlToValidate="txtDescription" Display="Dynamic" ErrorMessage="Укажите описание задания">
+            ControlToValidate="txtDescription" Display="Dynamic" ErrorMessage="Select Description">
         </asp:RequiredFieldValidator>
         <br /><br />
-        <asp:Label ID="lblAssignee" runat="server" Text="Исполнитель: "></asp:Label>
-        <asp:DropDownList ID="ddlAssignee" runat="server" DataTextField="Login" 
-            DataValueField="AssigneeId" ondatabound="ddlAssignee_DataBound">
+        <asp:Label ID="lblAssignee" runat="server" Text="Assignee: "></asp:Label>
+        <asp:DropDownList ID="ddlAssignee" runat="server" DataTextField="Login" DataValueField="Id"
+            AppendDataBoundItems="True">
+            <Items>
+                <asp:ListItem Text="(Select Assignee)"></asp:ListItem>
+            </Items>
         </asp:DropDownList>
         <br /><br />
-        <asp:Label ID="lblPriority" runat="server" Text="Приоритет: "></asp:Label>
-        <asp:DropDownList ID="ddlPriority" runat="server" DataTextField="Text" DataValueField="PriorityId">
+        <asp:Label ID="lblPriority" runat="server" Text="Priority: "></asp:Label>
+        <asp:DropDownList ID="ddlPriority" runat="server" DataTextField="Text" DataValueField="Id"
+            AppendDataBoundItems="True">
+            <Items>
+                <asp:ListItem Text="(Select Priority)"></asp:ListItem>
+            </Items>
         </asp:DropDownList>
         <br /><br />
-        <asp:Label ID="lblState" runat="server" Text="Статус: "></asp:Label>
-        <asp:DropDownList ID="ddlState" runat="server" DataTextField="Text" DataValueField="StateId">
+        <asp:Label ID="lblState" runat="server" Text="State: "></asp:Label>
+        <asp:DropDownList ID="ddlState" runat="server" DataTextField="Text" DataValueField="Id"
+            AppendDataBoundItems="True">
+            <Items>
+                <asp:ListItem Text="(Select State)"></asp:ListItem>
+            </Items>
         </asp:DropDownList>
         <br /><br />
-        <asp:Label ID="lblTags" runat="server" Text="Тэги: "></asp:Label>
-        <asp:CheckBoxList ID="cblTags" runat="server" DataTextField="Text" DataValueField="TagId">
+        <asp:Label ID="lblTags" runat="server" Text="Tags: "></asp:Label>
+        <asp:CheckBoxList ID="cblTags" runat="server" DataTextField="Text" 
+            DataValueField="Id" RepeatColumns="2" RepeatDirection="Vertical">
         </asp:CheckBoxList>
+        <br /><br />
+        <asp:Label ID="lblPicture" runat="server" Text="Picture: "></asp:Label>
+        <asp:FileUpload ID="fuPicture" runat="server" Width="315px" />
+        <br /><br /> 
         <asp:Button ID="btnSubmit" runat="server" Text="Submit" 
             onclick="btnSubmit_Click" />
     </div>

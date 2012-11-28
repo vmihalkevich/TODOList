@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -34,15 +35,55 @@ namespace TODOList
         {
             Page.Validate();
             if (!Page.IsValid) return;
+
+            //Upload image
+            string path = Server.MapPath("Images/");
+            string picturePath = "";
+            if (fuPicture.HasFile)
+            {
+                string ext = Path.GetExtension(fuPicture.FileName);
+                if (ext == ".jpg" || ext == ".png")
+                {
+                    fuPicture.SaveAs(path + fuPicture.FileName);
+                    
+                    picturePath = "~/Images/" + fuPicture.FileName;
+
+                    Response.Write("Your file has been uploaded");
+                }
+                else
+                {
+                    Response.Write("Your can upload only .jpg and .png files");
+                    return;
+                }
+            }
+            else
+            {                
+                Response.Write("Please select an file");
+                return;
+            }
+
             TaskRepository tr = new TaskRepository();
-            tr.AddTask(txtFirstDate.Text, txtLastDate.Text, txtTitle.Text, txtDescription.Text, ddlPriority.SelectedValue,
-                       ddlAssignee.SelectedValue, ddlState.SelectedValue);
+            Guid newTaskId = tr.AddTask(txtFirstDate.Text, txtLastDate.Text, txtTitle.Text, txtDescription.Text, ddlPriority.SelectedValue,
+                       ddlAssignee.SelectedValue, picturePath, ddlState.SelectedValue);
+
+            TagRepository tgr = new TagRepository();
             
+            for (int i = 0; i < cblTags.Items.Count; i++)
+            {
+
+                if (cblTags.Items[i].Selected)
+                {
+                    Guid tagId = Guid.Empty, result;
+                    if (Guid.TryParse(cblTags.Items[i].Value, out result))
+                    {
+                        tagId = result;
+                    }
+                    tgr.AddTaskTag(newTaskId, tagId);                    
+
+                }
+            }
+             
         }
 
-        protected void ddlAssignee_DataBound(object sender, EventArgs e)
-        {
-            (sender as DropDownList).Items.Insert(0, new ListItem("(Select Assignee)", "0"));
-        }
     }
 }

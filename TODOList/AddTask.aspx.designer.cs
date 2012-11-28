@@ -202,6 +202,24 @@ namespace TODOList {
         protected global::System.Web.UI.WebControls.CheckBoxList cblTags;
         
         /// <summary>
+        /// lblPicture control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPicture;
+        
+        /// <summary>
+        /// fuPicture control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuPicture;
+        
+        /// <summary>
         /// btnSubmit control.
         /// </summary>
         /// <remarks>

@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using DataAccess.Entities;
+
 namespace DataAccess.Repositories
 {
     public class StateRepository
     {
         public List<State> GetAllStates()
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.States.ToList();
+                return dc.tStates.Select(s => new State { Id = s.StateId, Text = s.Text }).ToList();
             }
         }
 
         public State GetStateById(Guid id)
         {
-            using (dbTODOListDataContext dc = new dbTODOListDataContext())
+            using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.States.SingleOrDefault(s => s.StateId == id);
+                var state = dc.tStates.SingleOrDefault(s => s.StateId == id);
+                if (state != null)
+                {
+                    return new State { Id = state.StateId, Text = state.Text };
+                }
+                return null;
             }
         }
-
     }
 }
