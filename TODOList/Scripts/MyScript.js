@@ -17,4 +17,5 @@
             $("#from").datepicker("option", "maxDate", selectedDate);
         }
     });
+    $("#dialog").dialog({ autoOpen: false, height: 200, width: 330 });
 });

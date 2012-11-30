@@ -9,27 +9,32 @@ namespace DataAccess.Repositories
 {
     public class PriorityRepository
     {
+        private static Priority CastPriority(tPriority linqPriority)
+        {
+            return linqPriority == null ? null : new Priority
+            {
+                Id = linqPriority.PriorityId,
+                Text = linqPriority.Text
+            };
+        }
+
         public List<Priority> GetAllPriorities()
         {
             using (TodoListDataContext dc = new TodoListDataContext())
-            {
-               // return dc.Priorities.ToList();
-                return dc.tPriorities.Select(p => new Priority { Id = p.PriorityId, Text = p.Text }).ToList();
+            {               
+                return dc.tPriorities.Select(p => CastPriority(p)).ToList();
             }
         }
 
         public Priority GetPriorityById(Guid id)
         {
+            Priority priority;
             using (TodoListDataContext dc = new TodoListDataContext())
-            {
-              //  return dc.Priorities.SingleOrDefault(p => p.PriorityId == id);
-                var priority = dc.tPriorities.SingleOrDefault(p => p.PriorityId == id);
-                if (priority != null) 
-                {
-                    return new Priority { Id = priority.PriorityId, Text = priority.Text };
-                }
-                return null;                
+            {              
+                var linqPriority = dc.tPriorities.SingleOrDefault(p => p.PriorityId == id);
+                priority = CastPriority(linqPriority);              
             }
+            return priority;
         }
     }
 }

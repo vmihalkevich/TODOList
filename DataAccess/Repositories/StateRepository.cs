@@ -9,25 +9,32 @@ namespace DataAccess.Repositories
 {
     public class StateRepository
     {
+        private static State CastState(tState linqState)
+        {
+            return linqState == null ? null : new State
+            {
+                Id = linqState.StateId,
+                Text = linqState.Text
+            };
+        }
+
         public List<State> GetAllStates()
         {
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.tStates.Select(s => new State { Id = s.StateId, Text = s.Text }).ToList();
+                return dc.tStates.Select(s => CastState(s)).ToList();
             }
         }
 
         public State GetStateById(Guid id)
         {
+            State state;
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                var state = dc.tStates.SingleOrDefault(s => s.StateId == id);
-                if (state != null)
-                {
-                    return new State { Id = state.StateId, Text = state.Text };
-                }
-                return null;
+                var linqState = dc.tStates.SingleOrDefault(s => s.StateId == id);
+                state = CastState(linqState);
             }
+            return state;
         }
     }
 }

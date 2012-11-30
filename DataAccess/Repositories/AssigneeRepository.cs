@@ -13,21 +13,30 @@ namespace DataAccess.Repositories
         {
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.tAssignees.Select(a => new Assignee { Id = a.AssigneeId, FirstName = a.FirstName, LastName = a.LastName, Login = a.Login }).ToList();
+                return dc.tAssignees.Select(a => CastAssignee(a)).ToList();
             }
         }
 
         public Assignee GetAssigneeById(Guid id)
         {
+            Assignee assignee;
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                var assignee = dc.tAssignees.SingleOrDefault(a => a.AssigneeId == id);
-                if (assignee != null)
-                {
-                    return new Assignee { Id = assignee.AssigneeId, FirstName = assignee.FirstName, LastName = assignee.LastName, Login = assignee.Login };
-                }
-                return null;
+                var linqAssignee = dc.tAssignees.SingleOrDefault(a => a.AssigneeId == id);
+                assignee = CastAssignee(linqAssignee);
             }
+            return assignee;
+        }
+
+        private static Assignee CastAssignee(tAssignee linqAssignee)
+        {
+            return linqAssignee == null ? null : new Assignee
+            {
+                Id = linqAssignee.AssigneeId,
+                FirstName = linqAssignee.FirstName,
+                LastName = linqAssignee.LastName,
+                Login = linqAssignee.Login
+            };
         }
     }
 }

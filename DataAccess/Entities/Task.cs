@@ -16,6 +16,5 @@ namespace DataAccess.Entities
         public Guid AssigneeId { get; set; }
         public string Picture { get; set; }
         public Guid StateId { get; set; }
-       // public string TaskTags { get; set; }
     }
 }

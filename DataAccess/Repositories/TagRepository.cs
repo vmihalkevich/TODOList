@@ -9,42 +9,60 @@ namespace DataAccess.Repositories
 {
     public class TagRepository
     {
+        private static Tag CastTag(tTag linqTag)
+        {
+            return linqTag == null ? null : new Tag
+            {
+                Id = linqTag.TagId,
+                Text = linqTag.Text
+            };
+        }
+
         public List<Tag> GetAllTags()
         {
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                return dc.tTags.Select(t => new Tag { Id = t.TagId, Text = t.Text }).ToList();
+                return dc.tTags.Select(t => CastTag(t)).ToList();
             }
         }
 
         public Tag GetTagById(Guid id)
         {
+            Tag tag;
             using (TodoListDataContext dc = new TodoListDataContext())
             {
-                var tag = dc.tTags.SingleOrDefault(t => t.TagId == id);
-                if (tag != null) 
-                {
-                    return new Tag { Id = tag.TagId, Text = tag.Text };
-                }
-                return null; 
+                var linqTag = dc.tTags.SingleOrDefault(t => t.TagId == id);
+                tag = CastTag(linqTag); 
             }
+            return tag;
         }
 
-        public string GetTaskTags(Guid id)
+        public string GetTaskTagsToStr(Guid id)
         {
             using (TodoListDataContext dc = new TodoListDataContext())
             {
                 string strTags = "";
-                var query = (from tag in dc.tTags
+                var tags = (from tag in dc.tTags
                             join taskTag in dc.tTaskTags on tag.TagId equals taskTag.TagId
                             where taskTag.TaskId == id
                             orderby tag.Text
-                            select new Tag { Text = tag.Text }).ToList<Tag>();
+                            select tag.Text ).ToList();
 
-
-                strTags = String.Join(", ", query);
-
+                strTags = String.Join(", ", tags);
                 return strTags;
+            }
+        }
+
+        public List<Tag> GetTaskTags(Guid id)
+        {
+            using (TodoListDataContext dc = new TodoListDataContext())
+            {
+                var tags = (from tag in dc.tTags
+                            join taskTag in dc.tTaskTags on tag.TagId equals taskTag.TagId
+                            where taskTag.TaskId == id
+                            select CastTag(tag)).ToList();
+                            //select new Tag { Id = tag.TagId, Text = tag.Text }).ToList<Tag>();
+                return tags;
             }
         }
 
@@ -62,5 +80,7 @@ namespace DataAccess.Repositories
                 dc.SubmitChanges();
             }
         }
+
+
     }
 }

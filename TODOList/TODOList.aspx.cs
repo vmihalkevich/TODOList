@@ -13,23 +13,17 @@ namespace TODOList
 {
     public partial class TODOList : System.Web.UI.Page
     {
-        protected override void OnInitComplete(EventArgs e)
-        {
-            base.OnInitComplete(e);
-            ddlAssignees.SelectedIndexChanged += new EventHandler(ddlAssignees_SelectedIndexChanged);
-            ddlPriorities.SelectedIndexChanged += new EventHandler(ddlPriorities_SelectedIndexChanged);
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
-                AssigneeRepository ar = new AssigneeRepository();
-                ddlAssignees.DataSource = ar.GetAllAssignees();
+                AssigneeRepository assigneeRepository = new AssigneeRepository();
+                ddlAssignees.DataSource = assigneeRepository.GetAllAssignees();
                 ddlAssignees.DataBind();
 
-                PriorityRepository pr = new PriorityRepository();
-                ddlPriorities.DataSource = pr.GetAllPriorities();
+                PriorityRepository priorityRepository = new PriorityRepository();
+                ddlPriorities.DataSource = priorityRepository.GetAllPriorities();
                 ddlPriorities.DataBind();
                 FillRepeater();
             }            
@@ -38,36 +32,63 @@ namespace TODOList
 
         protected void ddlAssignees_SelectedIndexChanged(object sender, EventArgs e)
         {
-            hfPage.Value = "1";
+            NowViewing = 0;
             hfAssigneeId.Value = ddlAssignees.SelectedValue;
             FillRepeater();
         }
 
         protected void ddlPriorities_SelectedIndexChanged(object sender, EventArgs e)
         {
-            hfPage.Value = "1";
+            NowViewing = 0;
             hfPriorityId.Value = ddlPriorities.SelectedValue;
             FillRepeater();
         }
 
         protected string GetAssigneeDetails(object id)
         {
-            AssigneeRepository ar = new AssigneeRepository();
-            var asn = ar.GetAssigneeById(Guid.Parse(id.ToString()));
-            return asn.LastName + " " + asn.FirstName;
+            AssigneeRepository assigneeRepository = new AssigneeRepository();
+            Guid Id = Guid.Empty, idOut;
+            if (Guid.TryParse(id.ToString(), out idOut))
+            {
+                Id = idOut;
+            }
+            var assignee = assigneeRepository.GetAssigneeById(Id);
+            return String.Join(" ", assignee.LastName, assignee.FirstName); 
         }
 
         protected string GetPriorityDetails(object id)
         {
-            PriorityRepository pr = new PriorityRepository();
-            var prt = pr.GetPriorityById(Guid.Parse(id.ToString()));
-            return prt.Text;
+            PriorityRepository priorityRepository = new PriorityRepository();
+            Guid Id = Guid.Empty, idOut;
+            if (Guid.TryParse(id.ToString(), out idOut))
+            {
+                Id = idOut;
+            }
+            var priority = priorityRepository.GetPriorityById(Id);
+            return priority.Text;
+        }
+
+        protected string GetStateDetails(object id)
+        {
+            StateRepository stateRepository = new StateRepository();
+            Guid Id = Guid.Empty, idOut;
+            if (Guid.TryParse(id.ToString(), out idOut))
+            {
+                Id = idOut;
+            }
+            var state = stateRepository.GetStateById(Id);
+            return state.Text;
         }
 
         protected string GetTagsDetails(object id)
         {
-            TagRepository tr = new TagRepository();
-            var strTags = tr.GetTaskTags(Guid.Parse(id.ToString()));
+            TagRepository tagRepository = new TagRepository();
+            Guid Id = Guid.Empty, idOut;
+            if (Guid.TryParse(id.ToString(), out idOut))
+            {
+                Id = idOut;
+            }
+            string strTags = tagRepository.GetTaskTagsToStr(Id);
             if (strTags.Length <= 0)
             {
                 strTags = "no tags";
@@ -105,56 +126,58 @@ namespace TODOList
 
         protected void FillRepeater()
         {
-            TaskRepository tr = new TaskRepository();
-            string page = hfPage.Value;
-            string pageSize = hfPageSize.Value;
-            string assigneeId = hfAssigneeId.Value;
-            string priorityId = hfPriorityId.Value;
-            string firstDate = hfFirstDate.Value;
-            string lastDate = hfLastDate.Value;
-            var list = tr.GetAllTasks(page, pageSize, assigneeId, priorityId, firstDate, lastDate);
+            TaskRepository taskRepository = new TaskRepository();
 
-            string sortExpression = (ViewState["SortExpression"] ?? "").ToString();
-            bool isAscending = true;
-
-            if (ViewState["SortDetails"] == null)
+            Guid assigneeId = Guid.Empty, priorityId = Guid.Empty, result2;
+            DateTime firstDate = DateTime.MinValue, lastDate = DateTime.MinValue, result3;
+            if (Guid.TryParse(hfAssigneeId.Value, out result2))
             {
-                Hashtable hs = new Hashtable();
-                hs.Add("StartDate", false);
-                ViewState["SortDetails"] = hs;
+                assigneeId = result2;
+            }
+            if (Guid.TryParse(hfPriorityId.Value, out result2))
+            {
+                priorityId = result2;
+            }
+            if (DateTime.TryParse(hfFirstDate.Value, out result3))
+            {
+                firstDate = result3;
+            }
+            if (DateTime.TryParse(hfLastDate.Value, out result3))
+            {
+                lastDate = result3;
             }
 
-            Hashtable hsSortDetails = ViewState["SortDetails"] as Hashtable;
+            var list = taskRepository.GetAllTasks(assigneeId, priorityId, firstDate, lastDate);
 
-            if (sortExpression.Length > 0)
-            {
-                if (!hsSortDetails.Contains(sortExpression))
-                    hsSortDetails.Add(sortExpression, true);
-                isAscending = bool.Parse(hsSortDetails[sortExpression].ToString());
-                hsSortDetails[sortExpression] = !isAscending;
-            } 
+            string sortExpression = (ViewState["SortExpression"] ?? "").ToString();
 
             switch (sortExpression)
             {
                 case "StartDate":
-                    list = tr.OrderByStartDate(list, isAscending);
+                    list = taskRepository.OrderByStartDate(list);
                     break;
                 case "FinishDate":
-                    list = tr.OrderByFinishDate(list, isAscending);
+                    list = taskRepository.OrderByFinishDate(list);                    
                     break;
                 case "Title":
-                    list = tr.OrderByTitle(list, isAscending);
+                    list = taskRepository.OrderByTitle(list);                    
                     break;
                 case "Description":
-                    list = tr.OrderByDescription(list, isAscending);
+                    list = taskRepository.OrderByDescription(list);                    
+                    break;
+                case "Priority":
+                    list = taskRepository.OrderByPriority(list);                    
+                    break;
+                case "Assignee":
+                    list = taskRepository.OrderByAssignee(list);                    
+                    break;
+                case "State":
+                    list = taskRepository.OrderByState(list);                    
                     break;
                 default:
-                    list = tr.OrderByStartDate(list, isAscending);
+                    list = taskRepository.OrderByStartDate(list);                    
                     break;
             }
-
-      //      rptTasks.DataSource = list; 
-      //     rptTasks.DataBind();
 
             //Create the object of PagedDataSource
             PagedDataSource objPds = new PagedDataSource();
@@ -165,8 +188,13 @@ namespace TODOList
             //Set the allow paging to true
             objPds.AllowPaging = true;
 
-            //Set the number of items you want to show
-            objPds.PageSize = Int32.Parse(hfPageSize.Value);
+            //Set the number of items to show
+            Int32 _pageSize = 0, pageSizeOut;
+            if (Int32.TryParse(hfPageSize.Value, out pageSizeOut))
+            {
+                _pageSize = pageSizeOut;
+            }
+            objPds.PageSize = _pageSize;
 
             string navigation = (ViewState["Navigation"] ?? "").ToString();
             switch (navigation)
@@ -197,24 +225,14 @@ namespace TODOList
             lbFirst.Enabled = !objPds.IsFirstPage;
             lbLast.Enabled = !objPds.IsLastPage;
             
-            // Display the page links
-            PagesDisplay.Text = "";
-            for (int i = 1; i <= objPds.PageCount; i++)
-            {
-                if ((NowViewing + 1) != i)
-                    PagesDisplay.Text += "<a href=\"javascript:ChangePage("+i+")\">"+i+"</a>  ";
-                else
-                    PagesDisplay.Text += "[" + i + "]  ";
-            }
-
             rptTasks.DataSource = objPds;
             rptTasks.DataBind(); 
-
         }
 
         protected void rptTasks_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             ViewState["SortExpression"] = e.CommandName;
+            NowViewing = 0;
             FillRepeater();
         }
 
@@ -242,5 +260,28 @@ namespace TODOList
             FillRepeater();
         }
 
+        protected void EditTask(object sender, CommandEventArgs e)
+        {
+            Response.Redirect("AddEditTask.aspx?Id=" + e.CommandArgument.ToString());
+        }
+
+        protected void AddTask(object sender, CommandEventArgs e)
+        {
+            Response.Redirect("AddEditTask.aspx");
+        }
+
+        protected void txtFirstDate_TextChanged(object sender, EventArgs e)
+        {
+            NowViewing = 0;
+            hfFirstDate.Value = txtFirstDate.Text;
+            FillRepeater();
+        }
+
+        protected void txtLastDate_TextChanged(object sender, EventArgs e)
+        {
+            NowViewing = 0;
+            hfLastDate.Value = txtLastDate.Text;
+            FillRepeater();
+        }
     }
 }

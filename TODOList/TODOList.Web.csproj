@@ -51,7 +51,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AddTask.aspx" />
+    <Content Include="AddEditTask.aspx" />
     <Content Include="Images\1.jpg" />
     <Content Include="Images\2.jpg" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -85,12 +85,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddTask.aspx.cs">
-      <DependentUpon>AddTask.aspx</DependentUpon>
+    <Compile Include="AddEditTask.aspx.cs">
+      <DependentUpon>AddEditTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AddTask.aspx.designer.cs">
-      <DependentUpon>AddTask.aspx</DependentUpon>
+    <Compile Include="AddEditTask.aspx.designer.cs">
+      <DependentUpon>AddEditTask.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TODOList.aspx.cs">

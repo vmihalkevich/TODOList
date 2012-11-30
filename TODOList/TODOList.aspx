@@ -14,7 +14,6 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        <asp:HiddenField ID="hfPage" runat="server" Value="1" />
         <asp:HiddenField ID="hfPageSize" runat="server" Value="5" />
         <asp:HiddenField ID="hfAssigneeId" runat="server" Value="-1" />
         <asp:HiddenField ID="hfPriorityId" runat="server" Value="null" />
@@ -23,12 +22,12 @@
 
         <div class="navPanel">
             <asp:Label ID="lblFirstDate" runat="server" Text="Creation Date: "></asp:Label>
-            <asp:TextBox ID="txtFirstDate" runat="server" EnableViewState="False" 
-                AutoPostBack="True"></asp:TextBox>
+            <asp:TextBox ID="txtFirstDate" runat="server" EnableViewState="True" 
+                AutoPostBack="True" ontextchanged="txtFirstDate_TextChanged"></asp:TextBox>
             <br /><br />
             <asp:Label ID="lblLastDate" runat="server" Text="Completion Date: "></asp:Label>
-            <asp:TextBox ID="txtLastDate" runat="server" EnableViewState="False" 
-                AutoPostBack="True"></asp:TextBox>
+            <asp:TextBox ID="txtLastDate" runat="server" EnableViewState="True" 
+                AutoPostBack="True" ontextchanged="txtLastDate_TextChanged"></asp:TextBox>
             <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="txtLastDate"
                 Display="Dynamic" ControlToCompare="txtFirstDate" Type="Date" Operator="GreaterThanEqual"
                 ErrorMessage="Completion date shall not be less than the creation date"></asp:CompareValidator>
@@ -48,6 +47,8 @@
                     <asp:ListItem Text="(All Priorities)"></asp:ListItem>
                 </Items>
             </asp:DropDownList>
+            <br /><br />
+            <asp:LinkButton ID="lbAddTask" Text="Add new task" runat="server" OnCommand="AddTask"></asp:LinkButton>
         </div>
         <div class="contentPanel">
              <asp:Repeater ID="rptTasks" runat="server" OnItemCommand="rptTasks_ItemCommand">
@@ -83,9 +84,14 @@
                         <p id="priority">
                             <%# GetPriorityDetails(Eval("PriorityId"))%>
                         </p>
-                        <p id="tags">
+                        <p id="state">
+                            <%# GetStateDetails(Eval("StateId"))%>
+                        </p>
+                        <p id="tags">Tags: 
                             <%# GetTagsDetails(Eval("Id"))%>
-                        </p>                           
+                        </p>
+                        <br />
+                        <asp:LinkButton ID="lbEdit" Text="Edit Task" runat="server" OnCommand="EditTask" CommandArgument='<%#Eval("Id")%>'></asp:LinkButton>                       
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
